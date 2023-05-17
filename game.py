@@ -1,7 +1,7 @@
 import pygame
 from board import Board
 
-
+# NOT SURE WHAT ELSE TO ADD HERE
 class Game:
     def __init__(self):
         pygame.init()

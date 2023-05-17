@@ -9,7 +9,7 @@ black_square_color = (181, 136, 99)
 WINDOW_SIZE = (512, 512)
 square_size = WINDOW_SIZE[0] // 8
 
-
+#NEED TO BUILD MOVING PIECES AND POTENTIAL MOVES
 class Board:
     def __init__(self, screen):
         self.screen = screen

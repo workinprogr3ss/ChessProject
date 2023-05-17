@@ -4,7 +4,7 @@ import pygame
 WINDOW_SIZE = (512, 512)
 square_size = WINDOW_SIZE[0] // 8
 
-
+# NEED TO ADD MOVING PAWN PIECE COMPLEXITY
 class Piece:
     def __init__(self, color):
         self.color = color
