@@ -210,6 +210,7 @@ class King(Piece):
         super().__init__(color)
         self.load_image(f"k{color}")
         self.has_moved = False
+        self.in_check = False # Used to tell if the king is in check
 
     def get_legal_moves(self, position, board):
         """

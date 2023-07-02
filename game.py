@@ -1,24 +1,34 @@
 import pygame
+import sys
 from board import Board
 from pieces import Piece, Pawn, Rook, Knight, Bishop, Queen, King
 
 
-# NOT SURE WHAT ELSE TO ADD HERE
 class Game:
     def __init__(self):
+        # Initialize pygame
         pygame.init()
         self.WINDOW_SIZE = (512, 512)
         self.screen = pygame.display.set_mode(self.WINDOW_SIZE)
 
+        # Initialize game variables
         self.square_size = self.WINDOW_SIZE[0] // 8
         self.selected_piece = None
         self.selected_position = None
         self.board = Board(self.screen)
         self.turn = "white"  # white goes first
 
+        # Initialize game settings
+        self.max_turn_time = 60  # 60 seconds
+        self.turn_start_time = None
+
     def game_loop(self):
+        """Main game loop"""
+        # Initialize game loop variables
         running = True
         legal_moves = []
+        self.turn_start_time = pygame.time.get_ticks() # intialize turn start time
+
         while running:
             self.board.draw_board(self.screen, self.selected_position, legal_moves)
 
@@ -35,7 +45,7 @@ class Game:
                         ]  # Not really piece but selected square on the board
                         if self.selected_piece is None:
                             if piece is not None:
-                                # Turn system by not allowing players to select opponents pieces
+                                # Prevents players to select opponents pieces
                                 wrong_piece_white = (
                                     piece.color == "b" and self.turn == "white"
                                 )
@@ -63,6 +73,8 @@ class Game:
 
                             # If player selects a legal move, then move the piece
                             elif dest_pos in legal_moves:
+
+                                # Castling
                                 if isinstance(self.selected_piece, King):
                                     self.selected_piece.has_moved = True
                                     self.move_piece(row, col)
@@ -80,6 +92,7 @@ class Game:
                                         self.board.board[row][0] = None
                                         self.board.board[row][3].has_moved = True
 
+                                # Pawn promotion, #####need to implement en passant#####
                                 elif isinstance(self.selected_piece, Pawn):
                                     self.selected_piece.has_moved = True
                                     color = self.selected_piece.color
@@ -88,17 +101,18 @@ class Game:
                                     if dest_pos[0] == 0 or dest_pos[0] == 7:
                                         self.board.board[row][col] = Queen(color)
 
+                                # If not King or Pawn, then move the piece
                                 else:
                                     self.move_piece(row, col)
                                     legal_moves = []
 
+            if pygame.time.get_ticks() - self.turn_start_time > self.max_turn_time * 1000:
+                print("Time's up!")
+                running = False # end game
+
             pygame.display.flip()
 
         pygame.quit()
-
-    def checkmate(self):
-        """Checks if the game is over"""
-        pass
 
     def move_piece(self, row, col):
         """Moves the piece on the board"""
@@ -109,7 +123,12 @@ class Game:
         # self.selected_piece.position = dest_pos
         self.selected_piece = None
         self.selected_position = None
-        self.turn = "black" if self.turn == "white" else "white"  # switch turns
+        self.switch_turns()
+
+    def switch_turns(self):
+        """Switches turns"""
+        self.turn = "black" if self.turn == "white" else "white"
+        self.turn_start_time = pygame.time.get_ticks()
 
 
 if __name__ == "__main__":
