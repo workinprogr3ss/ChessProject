@@ -1,5 +1,6 @@
 import pygame
 from board import Board
+from pieces import Piece, Pawn, Rook, Knight, Bishop, Queen, King
 
 
 # NOT SURE WHAT ELSE TO ADD HERE
@@ -31,7 +32,7 @@ class Game:
                         col = mouse_pos[0] // self.square_size
                         piece = self.board.board[row][
                             col
-                        ]  # Not really piece but selected area on the board
+                        ]  # Not really piece but selected square on the board
                         if self.selected_piece is None:
                             if piece is not None:
                                 # Turn system by not allowing players to select opponents pieces
@@ -59,25 +60,56 @@ class Game:
                                 self.selected_piece = None
                                 self.selected_position = None
                                 legal_moves = []
+
                             # If player selects a legal move, then move the piece
                             elif dest_pos in legal_moves:
-                                self.board.board[row][
-                                    col
-                                ] = self.selected_piece                 # Moves piece on board
-                                self.board.board[self.selected_position[0]][
-                                    self.selected_position[1]
-                                ] = None                                # Sets old position of piece to None
-                                self.selected_piece.position = dest_pos
-                                self.selected_piece = None
-                                self.selected_position = None
-                                legal_moves = []
-                                self.turn = (
-                                    "black" if self.turn == "white" else "white"
-                                )  # switch turns
+                                if isinstance(self.selected_piece, King):
+                                    self.selected_piece.has_moved = True
+                                    self.move_piece(row, col)
+                                    legal_moves = []
+                                    if dest_pos[1] == 6:
+                                        self.board.board[row][5] = self.board.board[
+                                            row
+                                        ][7]
+                                        self.board.board[row][7] = None
+                                        self.board.board[row][5].has_moved = True
+                                    elif dest_pos[1] == 2:
+                                        self.board.board[row][3] = self.board.board[
+                                            row
+                                        ][0]
+                                        self.board.board[row][0] = None
+                                        self.board.board[row][3].has_moved = True
+
+                                elif isinstance(self.selected_piece, Pawn):
+                                    self.selected_piece.has_moved = True
+                                    color = self.selected_piece.color
+                                    self.move_piece(row, col)
+                                    legal_moves = []
+                                    if dest_pos[0] == 0 or dest_pos[0] == 7:
+                                        self.board.board[row][col] = Queen(color)
+
+                                else:
+                                    self.move_piece(row, col)
+                                    legal_moves = []
 
             pygame.display.flip()
 
         pygame.quit()
+
+    def checkmate(self):
+        """Checks if the game is over"""
+        pass
+
+    def move_piece(self, row, col):
+        """Moves the piece on the board"""
+        self.board.board[row][col] = self.selected_piece  # Moves piece on board
+        self.board.board[self.selected_position[0]][
+            self.selected_position[1]
+        ] = None  # Sets old position of piece to None
+        # self.selected_piece.position = dest_pos
+        self.selected_piece = None
+        self.selected_position = None
+        self.turn = "black" if self.turn == "white" else "white"  # switch turns
 
 
 if __name__ == "__main__":
