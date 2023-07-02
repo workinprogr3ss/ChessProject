@@ -9,7 +9,8 @@ black_square_color = (181, 136, 99)
 WINDOW_SIZE = (512, 512)
 square_size = WINDOW_SIZE[0] // 8
 
-#NEED TO BUILD MOVING PIECES AND POTENTIAL MOVES
+
+# NEED TO BUILD MOVING PIECES AND POTENTIAL MOVES
 class Board:
     def __init__(self, screen):
         self.screen = screen
@@ -19,24 +20,68 @@ class Board:
 
     def initialize_board(self):
         # Define the initial state of the game board
-        board = [[Rook('b'), Knight('b'), Bishop('b'), Queen('b'), King('b'), Bishop('b'), Knight('b'), Rook('b')],
-                 [Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b'), Pawn('b')],
-                 [None, None, None, None, None, None, None, None],
-                 [None, None, None, None, None, None, None, None],
-                 [None, None, None, None, None, None, None, None],
-                 [None, None, None, None, None, None, None, None],
-                 [Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w'), Pawn('w')],
-                 [Rook('w'), Knight('w'), Bishop('w'), Queen('w'), King('w'), Bishop('w'), Knight('w'), Rook('w')]
-                 ]
+        board = [
+            [
+                Rook("b"),
+                Knight("b"),
+                Bishop("b"),
+                Queen("b"),
+                King("b"),
+                Bishop("b"),
+                Knight("b"),
+                Rook("b"),
+            ],
+            [
+                Pawn("b"),
+                Pawn("b"),
+                Pawn("b"),
+                Pawn("b"),
+                Pawn("b"),
+                Pawn("b"),
+                Pawn("b"),
+                Pawn("b"),
+            ],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [None, None, None, None, None, None, None, None],
+            [
+                Pawn("w"),
+                Pawn("w"),
+                Pawn("w"),
+                Pawn("w"),
+                Pawn("w"),
+                Pawn("w"),
+                Pawn("w"),
+                Pawn("w"),
+            ],
+            [
+                Rook("w"),
+                Knight("w"),
+                Bishop("w"),
+                Queen("w"),
+                King("w"),
+                Bishop("w"),
+                Knight("w"),
+                Rook("w"),
+            ],
+        ]
         return board
 
     def draw_board(self, screen, selected_piece, legal_moves):
         # Draw the squares
         for row in range(8):
             for col in range(8):
-                color = white_square_color if (row + col) % 2 == 0 else black_square_color
-                pygame.draw.rect(screen, color,
-                                 pygame.Rect(col * square_size, row * square_size, square_size, square_size))
+                color = (
+                    white_square_color if (row + col) % 2 == 0 else black_square_color
+                )
+                pygame.draw.rect(
+                    screen,
+                    color,
+                    pygame.Rect(
+                        col * square_size, row * square_size, square_size, square_size
+                    ),
+                )
 
         # Draw the pieces
         for row in range(8):
@@ -48,13 +93,21 @@ class Board:
         # If a piece is selected, draw a circle around it
         if selected_piece is not None:
             row, col = selected_piece
-            pygame.draw.circle(screen, (255, 0, 0), ((col + 0.5) * square_size, (row + 0.5) * square_size),
-                               square_size // 3)
+            pygame.draw.circle(
+                screen,
+                (255, 0, 0),
+                ((col + 0.5) * square_size, (row + 0.5) * square_size),
+                square_size // 3,
+            )
 
         # Draw legal move indicators for the selected piece
         if legal_moves:
             for r, c in legal_moves:
-                pygame.draw.circle(screen, (0, 255, 0), ((c + 0.5) * square_size, (r + 0.5) * square_size),
-                                   square_size // 10)
+                pygame.draw.circle(
+                    screen,
+                    (0, 255, 0),
+                    ((c + 0.5) * square_size, (r + 0.5) * square_size),
+                    square_size // 10,
+                )
 
         pygame.display.flip()

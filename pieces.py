@@ -4,6 +4,7 @@ import pygame
 WINDOW_SIZE = (512, 512)
 square_size = WINDOW_SIZE[0] // 8
 
+
 # NEED TO ADD MOVING PAWN PIECE COMPLEXITY
 class Piece:
     def __init__(self, color):
@@ -30,27 +31,55 @@ class Pawn(Piece):
         """
         row, col = position
         legal_moves = []
-        if self.color == 'w':
+        if self.color == "w":
             # White pawn can move one or two spaces forward if it hasn't moved yet
-            if row == 6 and board.board[row - 1][col] is None and board.board[row - 2][col] is None:
+            if (
+                row == 6
+                and board.board[row - 1][col] is None
+                and board.board[row - 2][col] is None
+            ):
                 legal_moves.append((row - 2, col))
             if row > 0 and board.board[row - 1][col] is None:
                 legal_moves.append((row - 1, col))
             # White pawn can capture diagonally if there is an opponent piece
-            if row > 0 and col > 0 and board.board[row - 1][col - 1] and board.board[row - 1][col - 1].color == 'b':
+            if (
+                row > 0
+                and col > 0
+                and board.board[row - 1][col - 1]
+                and board.board[row - 1][col - 1].color == "b"
+            ):
                 legal_moves.append((row - 1, col - 1))
-            if row > 0 and col < 7 and board.board[row - 1][col + 1] and board.board[row - 1][col + 1].color == 'b':
+            if (
+                row > 0
+                and col < 7
+                and board.board[row - 1][col + 1]
+                and board.board[row - 1][col + 1].color == "b"
+            ):
                 legal_moves.append((row - 1, col + 1))
-        elif self.color == 'b':
+        elif self.color == "b":
             # Black pawn can move one or two spaces forward if it hasn't moved yet
-            if row == 1 and board.board[row + 1][col] is None and board.board[row + 2][col] is None:
+            if (
+                row == 1
+                and board.board[row + 1][col] is None
+                and board.board[row + 2][col] is None
+            ):
                 legal_moves.append((row + 2, col))
             if row < 7 and board.board[row + 1][col] is None:
                 legal_moves.append((row + 1, col))
             # Black pawn can capture diagonally if there is an opponent piece
-            if row < 7 and col > 0 and board.board[row + 1][col - 1] and board.board[row + 1][col - 1].color == 'w':
+            if (
+                row < 7
+                and col > 0
+                and board.board[row + 1][col - 1]
+                and board.board[row + 1][col - 1].color == "w"
+            ):
                 legal_moves.append((row + 1, col - 1))
-            if row < 7 and col < 7 and board.board[row + 1][col + 1] and board.board[row + 1][col + 1].color == 'w':
+            if (
+                row < 7
+                and col < 7
+                and board.board[row + 1][col + 1]
+                and board.board[row + 1][col + 1].color == "w"
+            ):
                 legal_moves.append((row + 1, col + 1))
         return legal_moves
 
@@ -103,7 +132,16 @@ class Knight(Piece):
         """
         row, col = position
         legal_moves = []
-        offsets = [(2, 1), (2, -1), (-2, 1), (-2, -1), (1, 2), (1, -2), (-1, 2), (-1, -2)]
+        offsets = [
+            (2, 1),
+            (2, -1),
+            (-2, 1),
+            (-2, -1),
+            (1, 2),
+            (1, -2),
+            (-1, 2),
+            (-1, -2),
+        ]
 
         for dr, dc in offsets:
             r, c = row + dr, col + dc
@@ -162,7 +200,9 @@ class Queen(Piece):
         :return: a list of legal moves as (row, col) tuples
         """
         # Combine the moves of a bishop and rook, since a queen can move like both
-        return Bishop(self.color).get_legal_moves(position, board) + Rook(self.color).get_legal_moves(position, board)
+        return Bishop(self.color).get_legal_moves(position, board) + Rook(
+            self.color
+        ).get_legal_moves(position, board)
 
 
 class King(Piece):
