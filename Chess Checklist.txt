@@ -1,0 +1,12 @@
+Completed: 
+Method for Castling
+Added Pawn promotion to Queen 
+
+To Do:
+Method to check for checks and checkmates
+Method to check for stalemate
+Method to for en passant
+Timer for each player
+Display Captured Pieces
+
+AI Support (Need to import or build a chess engine for game AI)
